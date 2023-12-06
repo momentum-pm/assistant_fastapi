@@ -3,12 +3,14 @@ from typing import AsyncIterable
 from fastapi_poe import PoeBot
 from fastapi_poe.types import PartialResponse, QueryRequest
 from modal import Image, Stub, asgi_app
-from .llm import LLM
+
+# from llm import LLM
 
 
 class TestBot(PoeBot):
     def __init__(self, OPENAI_API_KEY: str):
-        self.chat_model = LLM(openai_api_key=OPENAI_API_KEY)
+        # self.chat_model = LLM(openai_api_key=OPENAI_API_KEY)
+        pass
 
     async def get_response(
         self, request: QueryRequest
