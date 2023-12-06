@@ -8,7 +8,7 @@ from modal import Image, Stub, asgi_app
 
 
 class TestBot(PoeBot):
-    def __init__(self, OPENAI_API_KEY: str):
+    def __init__(self):
         # self.chat_model = LLM(openai_api_key=OPENAI_API_KEY)
         pass
 
