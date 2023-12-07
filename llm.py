@@ -1,9 +1,23 @@
 from openai import OpenAI
-from .env import OPENAI_API_KEY
+
+
+# class Chat:
+#     pass
+
+
+# class Request:
+#     chat: Chat
+
+#     @property
+#     def last_message(self):
+#         pass
 
 
 class LLM:
-    client = OpenAI(api_key=OPENAI_API_KEY)
+    client = OpenAI()
+
+    def process(self, message):
+        pass
 
     def get_output(
         self, prompt, query, model="gpt-3.5-turbo", format="json_object", debug=False
@@ -27,7 +41,7 @@ class LLM:
             print(f"Response ({type(response)}): {text_response}")
         return response
 
-    def get_moderation(self, key, text):
+    def get_embedding(self, text):
         completion = self.client.moderations.create(
             input=[text],
             model="text-embedding-ada-002",
