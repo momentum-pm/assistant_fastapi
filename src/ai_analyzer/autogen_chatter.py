@@ -1,6 +1,5 @@
 import os
 import autogen
-from define_assistant import AssistantDefiner
 
 class AutoGenChatter:
   def __init__(self, autogen_user_proxy, autogen_assistant):
@@ -30,7 +29,11 @@ if __name__ == "__main__":
                 You are a helpful assistant who answers any questions.
             '''
 
-  test_assistant = AssistantDefiner(llm_config=llm_config, name="test_assistant", system_message=assistant_message).define_assistant()
+  test_assistant = autogen.AssistantAgent(
+            name="test_assistant",
+            system_message=assistant_message,
+            llm_config={"config_list":[{"api_key":""}]},
+        )
   test_user_proxy = autogen.UserProxyAgent(
         name="Dave",
         human_input_mode="ALWAYS",

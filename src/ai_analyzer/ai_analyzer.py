@@ -1,10 +1,21 @@
+import os
+import pathlib
 import autogen
-from define_assistant import AssistantDefiner
 from autogen_chatter import AutoGenChatter
 
-class GoalDefiner:
-    def __init__(self, config_list, cache_seed=33) -> None:
-        self.goal_definer_llm_config = {"config_list": config_list, "cache_seed": cache_seed, "timeout":360}
+class AiAnalyzer:
+    def __init__(self) -> None:
+        self._load_data()
+        self.autogen_chatter = AutoGenChatter()
+
+    async def analyze(self, message, user_id=1):      
+        response = await self.users_objects[user_id][task].chat(message)
+        return response
+
+    def _load_data(self):
+         self.file_path = os.path.join(pathlib.Path(__file__).parent.parent.parent.absolute(), "data/system_arch.pdf")
+         
+    def _initialize_assistant(self):
         self.Goal_Definer_message = '''
                     Go through these questions one by one. Ask a question, get the answer, go to next one
                     * What is the goal?
@@ -15,26 +26,28 @@ class GoalDefiner:
                 '''
 
         self.user_proxy_message = '''
+
+                '''
+        
+                
+                '''
                     You are talking to a user who wants to define a goal in a system of goals.
                     Each goal has an AI-PM and an Owner (a person).
                     You will be this goal's AI-PM.
                     Go through the questions one by one. Ask a question, get the answer, go to the next one.
                 '''
-        
-        self.goal_definer_assistant = AssistantDefiner(llm_config=self.goal_definer_llm_config, name="goal_definer", system_message=self.Goal_Definer_message).define_assistant()
+
+        self.goal_definer_assistant =  autogen.AssistantAgent(
+            name="goal_definer",
+            system_message=self.Goal_Definer_message,
+            llm_config={"config_list": [{"model":os.environ.get("DEFAULT_MODEL"), "api_key":"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"}], "cache_seed": cache_seed, "timeout":360},
+        )
         self.user_proxy = autogen.UserProxyAgent(
             name="Dave",
             human_input_mode="ALWAYS",
         )
 
-    def define_goal(self):
-        goal_definer_assistant.reset()
-        user_proxy.initiate_chat(goal_definer_assistant, message=self.user_proxy_message)
-
-    async def chat(self):
-        self.autogen_chatter = AutoGenChatter(user_proxy, goal_definer_assistant)
-
-
+        self.goal_definer_assistant.reset()
+        self.autogen_chatter = AutoGenChatter(self.user_proxy, self.goal_definer_assistant)
 if __name__ == "__main__":
-    goal_definer = GoalDefiner()
-    goal_definer.define_goal()
+    ai_analyzer = AiAnalyzer()
